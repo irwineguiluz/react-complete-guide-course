@@ -5,19 +5,14 @@ const initialGameBoard = [
   [null, null, null],
   [null, null, null]
 ];
-export default function GameBoard({onSelectSquare, activePlayerSymbol}) {
-  const [ gameBoard, setGameBoard ] = useState(initialGameBoard);
+export default function GameBoard({onSelectSquare, turns}) {
+  let gameBoard = initialGameBoard;
 
-  function handleSelectSquare(rowIndex, colIndex) {
-    setGameBoard((prevGameBoard) => {
-      // I don't know why I have to use spread operator for nested arrays
-      const updatedBoard = [...prevGameBoard.map(innerArray => [...innerArray])];
-      updatedBoard[rowIndex][colIndex] = activePlayerSymbol;
+  for (const turn of turns) {
+    const { square, player } = turn;
+    const { row, col } = square;
 
-      return updatedBoard;
-    });
-
-    onSelectSquare();
+    gameBoard[row][col] = player;
   }
 
   return (
@@ -27,7 +22,7 @@ export default function GameBoard({onSelectSquare, activePlayerSymbol}) {
           <ol>
             {row.map((playerSymbol, colIndex) => (
               <li key={colIndex}>
-                <button onClick={() => handleSelectSquare(rowIndex, colIndex)}>{playerSymbol}</button>
+                <button onClick={() => onSelectSquare(rowIndex, colIndex)}>{playerSymbol}</button>
               </li>
             ))}
           </ol>
