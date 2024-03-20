@@ -91,13 +91,13 @@ function App() {
             initialName="Player 1"
             symbol="X"
             isActive={activePlayer === 'X'}
-            handleChangePlayerName={handleChangePlayerName}
+            onChangeName={handleChangePlayerName}
           />
           <Player
             initialName="Player 2"
             symbol="O"
             isActive={activePlayer === 'O'}
-            handleChangePlayerName={handleChangePlayerName}
+            onChangeName={handleChangePlayerName}
           />
         </ol>
         {(winner || hasDraw) && (
