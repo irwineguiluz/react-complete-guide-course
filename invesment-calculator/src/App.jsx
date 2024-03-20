@@ -1,22 +1,25 @@
 import { useState } from "react";
 
 import UserInput from "./components/UserInput.jsx";
+import Result from "./components/Result.jsx";
+import { calculateInvestmentResults } from "./util/investment.js";
 
 const INVESTMENT_DEFAULT_VALUES = {
-  initialInvestment: 0,
-  annualInvestment: 0,
-  expectedReturn: 0,
-  duration: 0
+  initialInvestment: 10000,
+  annualInvestment: 1200,
+  expectedReturn: 6,
+  duration: 10
 };
 
 function App() {
   const [investmentValues, setInvestmentValues] = useState(INVESTMENT_DEFAULT_VALUES);
+  const invesmentResults = calculateInvestmentResults(investmentValues);
 
   function handleChangeValues(investmentName, newInvesmentValue) {
     setInvestmentValues(prevInvestmentValues => {
       return {
         ...prevInvestmentValues,
-        [investmentName]: newInvesmentValue
+        [investmentName]: +newInvesmentValue
       }
     });
   }
@@ -27,6 +30,7 @@ function App() {
         investmentValues={investmentValues}
         onChangeValues={handleChangeValues}
       />
+      {investmentValues.duration && <Result data={invesmentResults} />}
     </main>
   );
 }
