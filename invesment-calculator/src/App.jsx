@@ -14,6 +14,7 @@ const INVESTMENT_DEFAULT_VALUES = {
 function App() {
   const [investmentValues, setInvestmentValues] = useState(INVESTMENT_DEFAULT_VALUES);
   const invesmentResults = calculateInvestmentResults(investmentValues);
+  const inputIsValid = investmentValues.duration >= 1;
 
   function handleChangeValues(investmentName, newInvesmentValue) {
     setInvestmentValues(prevInvestmentValues => {
@@ -30,7 +31,10 @@ function App() {
         investmentValues={investmentValues}
         onChangeValues={handleChangeValues}
       />
-      {investmentValues.duration && <Result data={invesmentResults} />}
+      {!inputIsValid && (
+        <p className="center">Please enter a duration grater than zero.</p>
+      )}
+      {inputIsValid && <Result data={invesmentResults} />}
     </main>
   );
 }
