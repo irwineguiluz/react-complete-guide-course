@@ -28,12 +28,22 @@ function App() {
     });
   }
 
+  function handleCancelNewProject() {
+    setProjectsData(prevProjectsData => {
+      return {
+        ...prevProjectsData,
+        selectedProjectId: undefined
+      }
+    });
+  }
+
   let content;
 
   if (projectsData.selectedProjectId === null) {
     content = (
       <NewProject
-        onSubmitNewProject={handleSaveNewProject}
+        onSubmit={handleSaveNewProject}
+        onCancel={handleCancelNewProject}
       />
     );
   } else if (projectsData.selectedProjectId === undefined) {
