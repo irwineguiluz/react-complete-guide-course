@@ -79,6 +79,15 @@ function App() {
     });
   }
 
+  function handleDeleteProjectTask(taskId) {
+    setProjectsData(prevProjectsData => {
+      return {
+        ...prevProjectsData,
+        tasks: prevProjectsData.tasks.filter(task => task.id !== taskId)
+      }
+    });
+  }
+
   const selectedProject = projectsData.projects.find(project => project.id === projectsData.selectedProjectId);
   const selectedProjectTasks = projectsData.tasks.filter(task => task.projectId === projectsData.selectedProjectId);
 
@@ -88,6 +97,7 @@ function App() {
       tasks={selectedProjectTasks}
       onDelete={handleDeleteProject}
       onAddTask={handleAddProjectTask}
+      onDeleteTask={handleDeleteProjectTask}
     />
   );
 
