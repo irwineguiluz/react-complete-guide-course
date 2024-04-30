@@ -60,7 +60,8 @@ function App() {
     return projectsData.projects.find((project) => project.id === id);
   }
 
-  let content;
+  const selectedProject = projectsData.projects.find(project => project.id === projectsData.selectedProjectId);
+  let content = <SelectedProject project={selectedProject} onDelete={handleDeleteProject} />;
 
   if (projectsData.selectedProjectId === null) {
     content = (
@@ -71,9 +72,6 @@ function App() {
     );
   } else if (projectsData.selectedProjectId === undefined) {
     content = <NoProjectSelected onAddProject={handleAddProject} />
-  } else {
-    const project = getProjectById(projectsData.selectedProjectId);
-    content = <SelectedProject project={project} onDelete={handleDeleteProject} />
   }
 
   return (
