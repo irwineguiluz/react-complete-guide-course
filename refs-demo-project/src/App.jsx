@@ -73,7 +73,6 @@ function App() {
     content = <NoProjectSelected onAddProject={handleAddProject} />
   } else {
     const project = getProjectById(projectsData.selectedProjectId);
-    console.log(project);
     content = <SelectedProject project={project} onDelete={handleDeleteProject} />
   }
 
@@ -83,6 +82,7 @@ function App() {
         onAddProject={handleAddProject}
         onSelectProject={handleSelectProject}
         savedProjects={projectsData.projects}
+        selectedProjectId={projectsData.selectedProjectId}
       />
       {content}
     </main>
