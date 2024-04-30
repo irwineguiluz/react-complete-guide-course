@@ -3,6 +3,7 @@ import { useState } from 'react';
 import Sidebar from './components/Sidebar.jsx';
 import NewProject from './components/NewProject.jsx';
 import NoProjectSelected from './components/NoProjectSelected.jsx';
+import SelectedProject from './components/SelectedProject.jsx';
 
 function App() {
   const [ projectsData, setProjectsData ] = useState({
@@ -37,6 +38,28 @@ function App() {
     });
   }
 
+  function handleDeleteProject(projectId) {
+    setProjectsData(prevProjectsData => {
+      return {
+        selectedProjectId: undefined,
+        projects: prevProjectsData.projects.map((project) => project.id !== projectId)
+      }
+    })
+  }
+
+  function handleSelectProject(projectId) {
+    setProjectsData(prevProjectsData => {
+      return {
+        ...prevProjectsData,
+        selectedProjectId: projectId
+      }
+    });
+  }
+
+  function getProjectById(id) {
+    return projectsData.projects.find((project) => project.id === id);
+  }
+
   let content;
 
   if (projectsData.selectedProjectId === null) {
@@ -49,12 +72,18 @@ function App() {
   } else if (projectsData.selectedProjectId === undefined) {
     content = <NoProjectSelected onAddProject={handleAddProject} />
   } else {
-
+    const project = getProjectById(projectsData.selectedProjectId);
+    console.log(project);
+    content = <SelectedProject project={project} onDelete={handleDeleteProject} />
   }
 
   return (
     <main className="h-screen my-8 flex gap-8">
-      <Sidebar onAddProject={handleAddProject} savedProjects={projectsData.projects} />
+      <Sidebar
+        onAddProject={handleAddProject}
+        onSelectProject={handleSelectProject}
+        savedProjects={projectsData.projects}
+      />
       {content}
     </main>
   );
