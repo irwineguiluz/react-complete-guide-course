@@ -56,10 +56,6 @@ function App() {
     });
   }
 
-  function getProjectById(id) {
-    return projectsData.projects.find((project) => project.id === id);
-  }
-
   const selectedProject = projectsData.projects.find(project => project.id === projectsData.selectedProjectId);
   let content = <SelectedProject project={selectedProject} onDelete={handleDeleteProject} />;
 
