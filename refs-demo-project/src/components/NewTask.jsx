@@ -8,6 +8,10 @@ export default function NewTask({onAdd}) {
   }
 
   function handleSubmit() {
+    if (enteredTask.trim() === '') {
+      return;
+    }
+
     onAdd(enteredTask);
     setEnteredTask('');
   }
