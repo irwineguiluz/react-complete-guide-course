@@ -38,11 +38,13 @@ function App() {
     });
   }
 
-  function handleDeleteProject(projectId) {
+  function handleDeleteProject() {
     setProjectsData(prevProjectsData => {
       return {
         selectedProjectId: undefined,
-        projects: prevProjectsData.projects.map((project) => project.id !== projectId)
+        projects: prevProjectsData.projects.filter(
+          (project) => project.id !== prevProjectsData.selectedProjectId
+        )
       }
     })
   }
