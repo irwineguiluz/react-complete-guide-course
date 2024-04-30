@@ -5,10 +5,13 @@ import NewProject from './components/NewProject.jsx';
 import NoProjectSelected from './components/NoProjectSelected.jsx';
 import SelectedProject from './components/SelectedProject.jsx';
 
+import { randomString } from './helpers/randomString.jsx';
+
 function App() {
   const [ projectsData, setProjectsData ] = useState({
     selectedProjectId: undefined,
-    projects: []
+    projects: [],
+    tasks: []
   });
 
   function handleAddProject() {
@@ -23,6 +26,7 @@ function App() {
   function handleSaveNewProject(project) {
     setProjectsData(prevProjectsData => {
       return {
+        ...prevProjectsData,
         projects: [project, ...prevProjectsData.projects],
         selectedProjectId: undefined
       }
@@ -41,12 +45,13 @@ function App() {
   function handleDeleteProject() {
     setProjectsData(prevProjectsData => {
       return {
+        ...prevProjectsData,
         selectedProjectId: undefined,
         projects: prevProjectsData.projects.filter(
           (project) => project.id !== prevProjectsData.selectedProjectId
         )
       }
-    })
+    });
   }
 
   function handleSelectProject(projectId) {
@@ -58,8 +63,33 @@ function App() {
     });
   }
 
+  function handleAddProjectTask(text) {
+    setProjectsData(prevProjectsData => {
+      const taskId = randomString();
+      const newTask = {
+        id: taskId,
+        projectId: prevProjectsData.selectedProjectId,
+        text: text
+      };
+
+      return {
+        ...prevProjectsData,
+        tasks: [newTask, ...prevProjectsData.tasks]
+      }
+    });
+  }
+
   const selectedProject = projectsData.projects.find(project => project.id === projectsData.selectedProjectId);
-  let content = <SelectedProject project={selectedProject} onDelete={handleDeleteProject} />;
+  const selectedProjectTasks = projectsData.tasks.filter(task => task.projectId === projectsData.selectedProjectId);
+
+  let content = (
+    <SelectedProject
+      project={selectedProject}
+      tasks={selectedProjectTasks}
+      onDelete={handleDeleteProject}
+      onAddTask={handleAddProjectTask}
+    />
+  );
 
   if (projectsData.selectedProjectId === null) {
     content = (
