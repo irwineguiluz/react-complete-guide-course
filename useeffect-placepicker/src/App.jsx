@@ -8,11 +8,16 @@ import logoImg from './assets/logo.png';
 import { AVAILABLE_PLACES } from './data.js';
 import { sortPlacesByDistance } from './loc.js';
 
+const storeIds = JSON.parse(localStorage.getItem('selectedPlaces')) || [];
+const storedPlaces = storeIds.map((id) =>
+  AVAILABLE_PLACES.find(place => place.id === id)
+)
+
 function App() {
   const modal = useRef();
   const selectedPlace = useRef();
   const [availablePlaces, setAvailablePlaces] = useState([]);
-  const [pickedPlaces, setPickedPlaces] = useState([]);
+  const [pickedPlaces, setPickedPlaces] = useState(storedPlaces);
 
   useEffect(() => {
     navigator.geolocation.getCurrentPosition((position) => {
