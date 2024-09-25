@@ -20,7 +20,10 @@ export default function Quiz() {
     []
   );
 
-  const handleSkipQuestion = useCallback(() => handleSelectAnswer(null), [handleSelectAnswer]);
+  const handleSkipQuestion = useCallback(
+    () => handleSelectAnswer(null),
+    [handleSelectAnswer]
+  );
 
   if (isQuizFinished) {
     return (
@@ -35,6 +38,7 @@ export default function Quiz() {
     <div id="quiz">
       <Question
         onSelectAnswer={handleSelectAnswer}
+        onSkipQuestion={handleSkipQuestion}
         index={activeQuestionIndex}
         key={activeQuestionIndex}
       />
