@@ -20,7 +20,7 @@ function App() {
       <Header />
       <ConfigureCounter onSet={handleSetCount} />
       <main>
-        <Counter initialCount={chosenCount} />
+        <Counter key={chosenCount} initialCount={chosenCount} />
       </main>
     </>
   );
