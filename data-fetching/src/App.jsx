@@ -1,10 +1,13 @@
-import { useRef, useState, useCallback } from 'react';
+import { useRef, useState, useCallback, useEffect } from 'react';
+
+import { fetchFavPlaces, updateUserPlaces } from './http.js';
 
 import Places from './components/Places.jsx';
 import Modal from './components/Modal.jsx';
 import DeleteConfirmation from './components/DeleteConfirmation.jsx';
 import logoImg from './assets/logo.png';
 import AvailablePlaces from './components/AvailablePlaces.jsx';
+import ErrorPage from './components/Error.jsx';
 
 function App() {
   const selectedPlace = useRef();
@@ -12,6 +15,10 @@ function App() {
   const [userPlaces, setUserPlaces] = useState([]);
 
   const [modalIsOpen, setModalIsOpen] = useState(false);
+
+  const [isFetchingUserPlaces, setIsFetchingUserPlaces] = useState(false);
+
+  const [error, setError] = useState();
 
   function handleStartRemovePlace(place) {
     setModalIsOpen(true);
@@ -22,7 +29,7 @@ function App() {
     setModalIsOpen(false);
   }
 
-  function handleSelectPlace(selectedPlace) {
+  async function handleSelectPlace(selectedPlace) {
     setUserPlaces((prevPickedPlaces) => {
       if (!prevPickedPlaces) {
         prevPickedPlaces = [];
@@ -32,6 +39,11 @@ function App() {
       }
       return [selectedPlace, ...prevPickedPlaces];
     });
+
+    try {
+      await updateUserPlaces([selectedPlace, ...userPlaces]);
+    } catch (error) {
+    }
   }
 
   const handleRemovePlace = useCallback(async function handleRemovePlace() {
@@ -41,6 +53,28 @@ function App() {
 
     setModalIsOpen(false);
   }, []);
+
+  useEffect(() => {
+    async function fetchUserPlaces() {
+      setIsFetchingUserPlaces(true);
+
+      try {
+        const userPlaces = await fetchFavPlaces();
+
+        setUserPlaces(userPlaces);
+      } catch (error) {
+        setError(error);
+      }
+
+      setIsFetchingUserPlaces(false);
+    }
+
+    fetchUserPlaces();
+  }, []);
+
+  if (error) {
+    return <ErrorPage title="An error occurred!" message={error.message} />;
+  }
 
   return (
     <>
@@ -65,6 +99,8 @@ function App() {
           fallbackText="Select the places you would like to visit below."
           places={userPlaces}
           onSelectPlace={handleStartRemovePlace}
+          isLoading={isFetchingUserPlaces}
+          loadingText="Fetching your places..."
         />
 
         <AvailablePlaces onSelectPlace={handleSelectPlace} />
