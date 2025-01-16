@@ -13,12 +13,9 @@ function App() {
   const selectedPlace = useRef();
 
   const [userPlaces, setUserPlaces] = useState([]);
-
   const [modalIsOpen, setModalIsOpen] = useState(false);
-
   const [isFetchingUserPlaces, setIsFetchingUserPlaces] = useState(false);
-
-  const [error, setError] = useState();
+  const [errorUpdatingPlaces, setErrorUpdatingPlaces] = useState();
 
   function handleStartRemovePlace(place) {
     setModalIsOpen(true);
@@ -43,6 +40,10 @@ function App() {
     try {
       await updateUserPlaces([selectedPlace, ...userPlaces]);
     } catch (error) {
+      setErrorUpdatingPlaces({
+        message: error.message || 'Failed to update places.'
+      });
+      setUserPlaces(userPlaces);
     }
   }
 
@@ -53,6 +54,10 @@ function App() {
 
     setModalIsOpen(false);
   }, []);
+
+  function handleError() {
+    setErrorUpdatingPlaces(null);
+  }
 
   useEffect(() => {
     async function fetchUserPlaces() {
@@ -72,12 +77,16 @@ function App() {
     fetchUserPlaces();
   }, []);
 
-  if (error) {
-    return <ErrorPage title="An error occurred!" message={error.message} />;
-  }
-
   return (
     <>
+      <Modal open={errorUpdatingPlaces} onClose={handleError}>
+        {errorUpdatingPlaces && <ErrorPage
+          title="An error ocurred!"
+          message={errorUpdatingPlaces.message}
+          onConfirm={handleError}
+        />}
+      </Modal>
+
       <Modal open={modalIsOpen} onClose={handleStopRemovePlace}>
         <DeleteConfirmation
           onCancel={handleStopRemovePlace}
