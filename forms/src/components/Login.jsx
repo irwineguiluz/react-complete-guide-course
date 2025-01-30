@@ -1,7 +1,21 @@
+import { useState } from 'react';
+
 export default function Login() {
+  const [enteredValues, setEnteredValues] = useState({
+    email: '',
+    password: '',
+  });
+
   function handleSubmit(event) {
     event.preventDefault();
-    console.log('Submitted!');
+    console.log(enteredValues);
+  }
+
+  function handleInputChange(identifier, value) {
+    setEnteredValues((prevEnteredValues) => ({
+      ...prevEnteredValues,
+      [identifier]: value,
+    }));
   }
 
   return (
@@ -11,12 +25,24 @@ export default function Login() {
       <div className="control-row">
         <div className="control no-margin">
           <label htmlFor="email">Email</label>
-          <input id="email" type="email" name="email" />
+          <input
+            id="email"
+            type="email"
+            name="email"
+            value={enteredValues.email}
+            onChange={(e) => handleInputChange('email', e.target.value)}
+          />
         </div>
 
         <div className="control no-margin">
           <label htmlFor="password">Password</label>
-          <input id="password" type="password" name="password" />
+          <input
+            id="password"
+            type="password"
+            name="password"
+            value={enteredValues.password}
+            onChange={(e) => handleInputChange('password', e.target.value)}
+          />
         </div>
       </div>
 
