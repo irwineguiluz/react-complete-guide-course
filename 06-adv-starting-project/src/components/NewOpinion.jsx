@@ -1,8 +1,11 @@
 import { useActionState, use } from 'react';
 import { OpinionsContext } from '../store/opinions-context';
 
+import Submit from './Submit.jsx';
+
 export function NewOpinion() {
   const { addOpinion } = use(OpinionsContext);
+
   async function submitAction(prevFormState, formData) {
     const userName = formData.get('userName');
     const title = formData.get('title');
@@ -87,9 +90,7 @@ export function NewOpinion() {
           </div>
         )}
 
-        <p className="actions">
-          <button type="submit">Submit</button>
-        </p>
+        <Submit />
       </form>
     </div>
   );
