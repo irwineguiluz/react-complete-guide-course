@@ -1,3 +1,5 @@
+import { MealsContextProvider } from './store/meals-context';
+
 import Header from './components/Header';
 import MealsList from './components/MealsList';
 
@@ -5,7 +7,11 @@ function App() {
   return (
     <>
       <Header />
-      <MealsList />
+      <main>
+        <MealsContextProvider>
+          <MealsList />
+        </MealsContextProvider>
+      </main>
     </>
   );
 }
