@@ -7,7 +7,7 @@ export default function MealsList() {
   const { meals } = use(MealsContext);
 
   return (
-    <div id="meals">
+    <ul id="meals">
       {meals &&
         meals.map((meal) => (
           <MealItem
@@ -18,6 +18,6 @@ export default function MealsList() {
             image={meal.image}
           />
         ))}
-    </div>
+    </ul>
   );
 }
