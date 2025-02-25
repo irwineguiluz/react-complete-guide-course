@@ -22,16 +22,7 @@ export default function MealsList() {
 
   return (
     <ul id="meals">
-      {meals &&
-        meals.map((meal) => (
-          <MealItem
-            key={meal.id}
-            name={meal.name}
-            description={meal.description}
-            price={meal.price}
-            image={meal.image}
-          />
-        ))}
+      {meals && meals.map((meal) => <MealItem key={meal.id} meal={meal} />)}
     </ul>
   );
 }
