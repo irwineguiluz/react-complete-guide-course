@@ -1,6 +1,7 @@
-import { useContext } from 'react';
+import { useContext, useRef } from 'react';
 
 import Button from './UI/Button.jsx';
+import Modal from './UI/Modal.jsx';
 import CartContext from '../store/cart-context.jsx';
 import logoImg from '../assets/logo.jpg';
 
@@ -9,16 +10,26 @@ export default function Header() {
   const totalCartItems = cartCtx.items.reduce((totalNumberOfItems, item) => {
     return totalNumberOfItems + item.quantity;
   }, 0);
+  const dialog = useRef();
+
+  function handleOpenCart() {
+    dialog.current.open();
+  }
 
   return (
-    <header id="main-header">
-      <div id="title">
-        <img src={logoImg} alt="A dish" />
-        <h1>Food App</h1>
-      </div>
-      <nav>
-        <Button textOnly>Cart ({totalCartItems})</Button>
-      </nav>
-    </header>
+    <>
+      <Modal ref={dialog}>Hello</Modal>
+      <header id="main-header">
+        <div id="title">
+          <img src={logoImg} alt="A dish" />
+          <h1>Food App</h1>
+        </div>
+        <nav>
+          <Button onClick={handleOpenCart} textOnly>
+            Cart ({totalCartItems})
+          </Button>
+        </nav>
+      </header>
+    </>
   );
 }
