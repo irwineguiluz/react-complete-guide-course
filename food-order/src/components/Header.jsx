@@ -1,35 +1,32 @@
-import { useContext, useRef } from 'react';
+import { useContext } from 'react';
 
 import Button from './UI/Button.jsx';
-import Modal from './UI/Modal.jsx';
-import CartContext from '../store/cart-context.jsx';
 import logoImg from '../assets/logo.jpg';
+import CartContext from '../store/cart-context.jsx';
+import UserProgressContext from '../store/user-progress-context.jsx';
 
 export default function Header() {
   const cartCtx = useContext(CartContext);
+  const userProgressCtx = useContext(UserProgressContext);
   const totalCartItems = cartCtx.items.reduce((totalNumberOfItems, item) => {
     return totalNumberOfItems + item.quantity;
   }, 0);
-  const dialog = useRef();
 
-  function handleOpenCart() {
-    dialog.current.open();
+  function handleShowCart() {
+    userProgressCtx.showCart();
   }
 
   return (
-    <>
-      <Modal ref={dialog}>Hello</Modal>
-      <header id="main-header">
-        <div id="title">
-          <img src={logoImg} alt="A dish" />
-          <h1>Food App</h1>
-        </div>
-        <nav>
-          <Button onClick={handleOpenCart} textOnly>
-            Cart ({totalCartItems})
-          </Button>
-        </nav>
-      </header>
-    </>
+    <header id="main-header">
+      <div id="title">
+        <img src={logoImg} alt="A dish" />
+        <h1>Food App</h1>
+      </div>
+      <nav>
+        <Button onClick={handleShowCart} textOnly>
+          Cart ({totalCartItems})
+        </Button>
+      </nav>
+    </header>
   );
 }
