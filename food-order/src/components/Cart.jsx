@@ -13,6 +13,10 @@ export default function Cart() {
     return currentTotalPrice + item.price * item.quantity;
   }, 0);
 
+  function handleCloseCart() {
+    userProgressCtx.hideCart();
+  }
+
   return (
     <Modal className="cart" isOpen={userProgressCtx.progress === 'cart'}>
       <h2>Your Cart</h2>
@@ -25,7 +29,9 @@ export default function Cart() {
       </ul>
       <p className="cart-total">Total: {currencyFormatter.format(cartTotal)}</p>
       <p className="modal-actions">
-        <Button textOnly>Close</Button>
+        <Button onClick={handleCloseCart} textOnly>
+          Close
+        </Button>
         <Button>Go to Checkout</Button>
       </p>
     </Modal>
