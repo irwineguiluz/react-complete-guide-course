@@ -2,6 +2,7 @@ import { useContext } from 'react';
 
 import Modal from './UI/Modal.jsx';
 import Button from './UI/Button.jsx';
+import CartItem from './CartItem.jsx';
 import CartContext from '../store/cart-context';
 import UserProgressContext from '../store/user-progress-context.jsx';
 import { currencyFormatter } from '../util/formatting.js';
@@ -22,9 +23,14 @@ export default function Cart() {
       <h2>Your Cart</h2>
       <ul>
         {cartCtx.items.map((item) => (
-          <li key={item.id}>
-            {item.name} - {item.quantity}
-          </li>
+          <CartItem
+            key={item.id}
+            name={item.name}
+            price={item.price}
+            quantity={item.quantity}
+            onIncrease={() => cartCtx.addItem(item)}
+            onDecrease={() => cartCtx.removeItem(item.id)}
+          />
         ))}
       </ul>
       <p className="cart-total">Total: {currencyFormatter.format(cartTotal)}</p>
