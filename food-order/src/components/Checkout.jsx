@@ -7,6 +7,7 @@ import Error from './Error.jsx';
 import CartContext from '../store/cart-context.jsx';
 import UserProgressContext from '../store/user-progress-context.jsx';
 import useHttp from '../hooks/useHttp.js';
+import { useActionState } from 'react';
 
 const requestConfig = {
   method: 'POST',
@@ -18,13 +19,10 @@ const requestConfig = {
 export default function Checkout() {
   const cartCtx = useContext(CartContext);
   const userProgressCtx = useContext(UserProgressContext);
-  const {
-    data,
-    isLoading: isSending,
-    error,
-    sendRequest,
-    clearData,
-  } = useHttp('http://localhost:3000/orders', requestConfig);
+  const { data, error, sendRequest, clearData } = useHttp(
+    'http://localhost:3000/orders',
+    requestConfig
+  );
   const cartTotal = cartCtx.items.reduce((total, item) => {
     return total + item.price * item.quantity;
   }, 0);
@@ -39,7 +37,7 @@ export default function Checkout() {
     clearData();
   }
 
-  async function checkoutAction(formData) {
+  async function checkoutAction(prevFormState, formData) {
     const customerData = Object.fromEntries(formData.entries());
 
     await sendRequest(
@@ -51,6 +49,11 @@ export default function Checkout() {
       })
     );
   }
+
+  const [formState, formAction, isSending] = useActionState(
+    checkoutAction,
+    null
+  );
 
   if (data && !error) {
     return (
@@ -76,7 +79,7 @@ export default function Checkout() {
       isOpen={userProgressCtx.progress === 'checkout'}
       onClose={handleCloseCheckout}
     >
-      <form action={checkoutAction}>
+      <form action={formAction}>
         <h2>Checkout</h2>
         <p>Total amount: {cartTotal}</p>
 
